@@ -29,8 +29,6 @@ func ProxyHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
     fmt.Println("started.")
-    http.Handle("/keyword/", http.StripPrefix("/keyword/", http.FileServer(http.Dir("./keyword"))))
-    http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("./index"))))
     http.HandleFunc("/302", ProxyHandler)
     err:=http.ListenAndServe("127.0.0.1:8888", nil)
     if err != nil {

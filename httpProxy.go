@@ -6,7 +6,7 @@ import (
     "io"
 )
 
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
+func ProxyHandler(w http.ResponseWriter, r *http.Request) {
     //fmt.Fprintln(w, "hello world")
     vars := r.URL.Query();
     url := vars["url"][0]
@@ -29,7 +29,9 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
     fmt.Println("started.")
-    http.HandleFunc("/302", IndexHandler)
+    http.Handle("/keyword/", http.StripPrefix("/keyword/", http.FileServer(http.Dir("./keyword"))))
+    http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("./index"))))
+    http.HandleFunc("/302", ProxyHandler)
     err:=http.ListenAndServe("127.0.0.1:8888", nil)
     if err != nil {
         fmt.Println("err:", err)
